@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  backend:
+    build: .
+    ports:
+      - 3000:3000
+    tty: true
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=task_management
+    ports:
+      - "5434:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  adminer_container:
+     image: adminer:latest
+     environment: 
+        ADMINER_DEFAULT_SERVER: postgres
+        ADMINER_DESIGN: galkaev
+     ports: 
+          - 8080:8080
+volumes:
+  db:
+    driver: local
