@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -14,7 +18,15 @@ export class UserRepository extends Repository<User> {
     const user = new User();
     user.username = username;
     user.password = password;
-
-    await user.save();
+    try {
+      await user.save();
+    } catch (error) {
+      if (error.code === '23505') {
+        //duplicate username
+        throw new ConflictException('Username already exist');
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 }
