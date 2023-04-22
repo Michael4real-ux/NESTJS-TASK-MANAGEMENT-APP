@@ -7,27 +7,11 @@ import { TaskStatus } from './task-status.enum';
 
 @Injectable()
 export class TasksService {
-  constructor(
-    // @InjectRepository(Task)
-    private taskRepository: TaskRepository,
-  ) {}
-  // getAllTasks(): Task[] {
-  //   return this.tasks;
-  // }
-  // getTaskWithFilters(filterDto: GetTaskFilterDto): Task[] {
-  //   const { status, search } = filterDto;
-  //   let tasks = this.getAllTasks();
-  //   if (status) {
-  //     tasks = tasks.filter((task) => task.status === status);
-  //   }
-  //   if (search) {
-  //     tasks = tasks.filter(
-  //       (task) =>
-  //         task.title.includes(search) || task.description.includes(search),
-  //     );
-  //   }
-  //   return tasks;
-  // }
+  constructor(private taskRepository: TaskRepository) {}
+  getTasks(filterDto: GetTaskFilterDto) {
+    //
+  }
+
   async getTaskById(id: number): Promise<Task> {
     const found = await this.taskRepository.findOne({
       where: {
@@ -57,9 +41,4 @@ export class TasksService {
     await task.save();
     return task;
   }
-  // updateTaskStatus(id: string, status: TaskStatus): Task {
-  //   const task = this.getTaskById(id);
-  //   task.status = status;
-  //   return task;
-  // }
 }
